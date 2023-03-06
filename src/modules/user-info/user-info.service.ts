@@ -1,11 +1,16 @@
-import { Injectable, InternalServerErrorException, NotFoundException,Logger, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  Logger,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInfoDto } from './dto/create-user-info.dto';
 import { UpdateUserInfoDto } from './dto/update-user-info.dto';
 import { UserInfo } from './entities/user-info.entity';
 import { DeleteResultModel } from '../../models/delete-result.model';
-
 
 @Injectable()
 export class UserInfoService {
@@ -57,5 +62,17 @@ export class UserInfoService {
     const deleteResult = await this.repository.softDelete(user.id);
 
     return new DeleteResultModel(id, deleteResult);
+  }
+
+  async findOneByEmailOrFail(email: string): Promise<UserInfo> {
+    try {
+      return await this.repository.findOneByOrFail({
+        email,
+      });
+    } catch (error) {
+      this.logger.error('User not found', error.stack);
+
+      throw new NotFoundException('User not found');
+    }
   }
 }

@@ -1,23 +1,21 @@
-import { IsNotEmpty, IsString, IsNumber, isNumber } from '@nestjs/class-validator';
-
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  isNumber,
+} from '@nestjs/class-validator';
 
 export class CreateCourses {
-    @IsString()
-    @IsNotEmpty()
-    name: string;
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 
+  @IsString()
+  startDate: string;
 
-    @IsString()
-    startDate: string;
+  @IsNumber()
+  hours: number;
 
-
-    @IsNumber()
-    hours: number;
-
-    @IsString()
-    img: string;
-
+  @IsString()
+  img: string;
 }
-
-
-
