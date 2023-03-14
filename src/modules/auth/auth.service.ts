@@ -19,14 +19,24 @@ export class AuthService {
 
     if (user && user.password === password) {
       const { password, ...result } = user;
-      return user;
+      return result;
     }
     return null;
   }
 
   async login(user: Partial<UserInfo>) {
-    const payload = { email: user.email, sub: user.id };
+    //const payload = { email: user.email, sub: user.id };
+    const userInfo = await this.userInfoService.findOneByEmailOrFail(
+      user.email,
+    );
+
+    const payload = {
+      name: userInfo.name,
+      role: userInfo.role,
+      sub: userInfo.id,
+    };
     return {
+     // user: userInfo,
       access_token: this.jwtService.sign(payload),
     };
   }
